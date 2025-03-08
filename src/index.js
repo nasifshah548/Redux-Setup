@@ -1,1 +1,5 @@
-console.log("Redux Starter Project!!");
+function greeting() {
+    return function() {
+        return "Good Morning!!";
+    }
+}
