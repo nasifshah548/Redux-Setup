@@ -1,6 +1,6 @@
 import store from "./store";
-import { addTask, removeTask, completedTask } from "./action";
-// Importing the addTask(), removeTask() and completedTask() action functions from the action.js file      
+import { addTask, removeTask, completedTask, fetchTodo } from ".store/tasks/action";
+// Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file      
 
 // This is the built-in subscribe() of the redux store. If any state at the store 
 // changes then this function will run in order to let all the components, subscribed
@@ -14,10 +14,11 @@ store.dispatch(addTask("Read Book"));   // Dispatching the addTask() action func
 store.dispatch(addTask("Write Paper"));
 console.log(store.getState());
 
-unsubscribe();
+// unsubscribe();
 store.dispatch(completedTask(2));
 
 store.dispatch(removeTask(1));           // Dispatching the "REMOVE_TASK" action to the reducer in the store
+store.dispatch(fetchTodo());
 console.log(store.getState());
 
 /* 

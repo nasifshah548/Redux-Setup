@@ -25,3 +25,11 @@ export const removeTask = (id) => {
 export const completedTask = (id) => {
     return {type: actionTypes.TASK_COMPLETED, payload: {id: id}}
 }
+
+// Action function to call API
+
+export const fetchTodo = () => async function(dispatch) {      // Thunk function to make API calls 
+            const response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
+            const task = await response.json();
+            dispatch(addTask(task.title));
+};
