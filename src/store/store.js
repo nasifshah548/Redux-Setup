@@ -1,9 +1,12 @@
-import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import { legacy_createStore as createStore, applyMiddleware, compose } from "redux";
+import { devToolsEnhancer } from "redux-devtools-extension";
 import thunk from "redux-thunk";
 import reducer from "./tasks/reducer";
 
-const store = createStore(reducer, applyMiddleware(thunk));     // Storing the reducer in the store
+const composedEnhancers = compose(applyMiddleware(thunk), devToolsEnhancer({ trace: true }));
 
-export default store; 
+const store = createStore(reducer, composedEnhancers);
+
+export default store;
 
 // applyMiddleware(thunk): This is an old method of calling APIs in Redux.
