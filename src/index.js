@@ -1,6 +1,12 @@
 import store from "./store";
-import { addTask, removeTask, completedTask, fetchTodo } from ".store/tasks/action";
-// Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file      
+// import { addTask, removeTask, completedTask, fetchTodo } from ".store/tasks/action";
+import { addEmployee } from "./store/employeeSlice";
+// Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file 
+
+
+store.dispatch(addEmployee({ name: Emma }));
+
+/*
 
 // This is the built-in subscribe() of the redux store. If any state at the store 
 // changes then this function will run in order to let all the components, subscribed

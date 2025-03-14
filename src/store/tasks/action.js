@@ -1,4 +1,14 @@
-import * as actionTypes from "./actionTypes"; // importing all action types from actionTypes.js file 
+import * as actionTypes from "./actionTypes"; // importing all action types from actionTypes.js file
+import { createAction } from "@reduxjs/toolkit"; 
+
+// Actions
+
+export const addTask = createAction(actionTypes.ADD_TASK);
+export const removeTask = createAction(actionTypes.REMOVE_TASK);
+export const completeTask = createAction(actionTypes.TASK_COMPLETED);
+console.log(test({task: "Read Book"}));                 // Output: {type: "ADD_TASK", payload: {task: "Read Book"}}
+
+/*
 
 // "ADD_TASK" action function, taking the task to be added as its argument 
 // This action function will be dispatched to the reducer in the store when the user 
@@ -32,4 +42,6 @@ export const fetchTodo = () => async function(dispatch) {      // Thunk function
             const response = await fetch("https://jsonplaceholder.typicode.com/todos/1");
             const task = await response.json();
             dispatch(addTask(task.title));
-};
+}; 
+
+*/
