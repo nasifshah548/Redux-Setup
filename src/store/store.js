@@ -4,15 +4,25 @@
 import { configureStore } from "@reduxjs/toolkit";
 import taskReducer from "./tasks/taskSlice";
 import employeeReducer from "./employeeSlice";
+import logger from "redux-logger";
+import error from "../middleware/error";
 
 const store = configureStore({ 
     reducer: {                      // Storing the reducers at the store
         tasks: taskReducer,
         employees: employeeReducer,
-    }
+    },
+    middleware: (getDefaultMiddleware) => [
+        ...getDefaultMiddleware(), 
+        logger, 
+        error
+    ], 
 });
 
 export default store;
+
+// The Middleware functions will run in order. First the default Middleware function will run.
+// Then the logger Middleware function will run, then the error Middleware function will run. 
 
 // const composedEnhancers = compose(applyMiddleware(thunk), devToolsEnhancer({ trace: true }));
 

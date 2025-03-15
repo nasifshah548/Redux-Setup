@@ -6,6 +6,9 @@ import { addEmployee } from "./store/employeeSlice";
 
 store.dispatch(addEmployee({ name: Emma }));
 
+// store.dispatch({type: "SHOW_ERROR", payload: {error: "User not found"}}) // Will hit the error Middleware before this action
+                                                                            // can go to the reducers
+
 /*
 
 // This is the built-in subscribe() of the redux store. If any state at the store 
