@@ -1,11 +1,11 @@
 // import { legacy_createStore as createStore, applyMiddleware, compose } from "redux";
 // import { devToolsEnhancer } from "redux-devtools-extension";
 // import thunk from "redux-thunk";
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
 import taskReducer from "./tasks/taskSlice";
 import employeeReducer from "./employeeSlice";
 import logger from "redux-logger";
-import error from "../middleware/error";
+import error from "./middleware/error";
 
 const store = configureStore({ 
     reducer: {                      // Storing the reducers at the store

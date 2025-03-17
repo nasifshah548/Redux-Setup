@@ -1,10 +1,27 @@
 import store from "./store";
 // import { addTask, removeTask, completedTask, fetchTodo } from ".store/tasks/action";
-import { addEmployee } from "./store/employeeSlice";
-// Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file 
+// import { addEmployee } from "./store/employeeSlice";
+// Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file
+import { getTasks } from "./store/tasks/taskSlice";
+
+// Using Function to call API method
+
+const gettingTasks = async() => {
+  // Calling API
+  const response = await axios.get("http//localhost:5000/api/tasks");
+  console.log(response);
+
+  // Dispatching action
+  store.dispatch(getTasks({tasks: response.data}));
+};
 
 
-store.dispatch(addEmployee({ name: Emma }));
+gettingTasks();
+
+
+
+
+// store.dispatch(addEmployee({ name: Emma }));
 
 // store.dispatch({type: "SHOW_ERROR", payload: {error: "User not found"}}) // Will hit the error Middleware before this action
                                                                             // can go to the reducers
