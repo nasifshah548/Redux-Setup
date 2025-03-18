@@ -1,5 +1,6 @@
 // import * as actionTypes from "./actionTypes"; // importing all action types from actionTypes.js file 
 import { createReducer, createSlice } from "@reduxjs/toolkit";
+import { apiCallBegan } from "../api";
 // import { completeTask, removeTask } from "./action";
 
 
@@ -18,27 +19,67 @@ const taskSlice = createSlice({
             return action.payload.tasks; 
         },
         addTask: (state, action) => {
+            state.task.push(action.payload);
+        },
+       /* addTask: (state, action) => {
             state.push({
                 id: ++id,                       // Generating a new id by incrementing the id number cause we're adding a new task with new id
                 task: action.payload.task,      // Passing the task property in the payload object with the action
                 completed: false,               // Setting up a boolean depending on task completed or not, will change to true when task completed
             })
-        },
+        }, */
        removeTask: (state, action) => {
         const index = state.findIndex(task => task.id === action.payload.id)
         state.splice(index, 1)
        },
-       completeTask: (state, action) => {
+       completedTask: (state, action) => {
         const index = state.findIndex(task => task.id === action.payload.id)
-        state[index].completed = true; 
+        state[index].completed = action.payload.completed; 
        }, 
     }
 })
 
 console.log(taskSlice);
 
-export const {addTask, removeTask, completeTask, getTasks} = taskSlice.actions;     // Exporting the actions
-export default taskSlice.reducer;                                                   // Exporting all the reducers as a single chunck 
+export const {apiRequested, apiRequestedFailed, addTask, 
+    removeTask, completedTask, getTasks} = taskSlice.actions;     // Exporting the actions
+export default taskSlice.reducer;                                // Exporting all the reducers as a single chunck 
+
+// Action Creators
+const url = "/tasks";
+
+// Custom Middlware for API
+
+export const loadTasks = () => apiCallBegan({
+    url,
+    onStart: apiRequested.type,
+    onSuccess: getTasks.type,
+    onError: apiRequestedFailed.type,
+});
+
+export const addNewTask = task => apiCallBegan({
+    url,
+    method: "POST",
+    data: task, 
+    onSuccess: addTask.type, 
+});
+
+export const updateCompleted = task => apiCallBegan({
+    // task-6
+    url:`${url}/${task.id}`,
+    method: "PATCH",
+    data: task,
+    onSuccess: completedTask.type,
+});
+
+export const deleteTask = task => apiCallBegan({
+    // task-6
+    url:`${url}/${task.id}`,
+    method: "DELETE",
+    onSuccess: removeTask.type,
+});
+
+
 
 
 /*

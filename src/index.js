@@ -1,8 +1,10 @@
+import { add } from "lodash";
 import store from "./store";
 // import { addTask, removeTask, completedTask, fetchTodo } from ".store/tasks/action";
 // import { addEmployee } from "./store/employeeSlice";
 // Importing the addTask(), removeTask(), completedTask() and fetchTodo() action functions from the action.js file
-import { getTasks } from "./store/tasks/taskSlice";
+// import { apiCallBegan } from "./store/api";
+import { getTasks, loadTasks, addNewTask, updateCompleted, deleteTask, removeTask } from "./store/tasks/taskSlice";
 
 // Using Function to call API method
 
@@ -18,8 +20,26 @@ const gettingTasks = async() => {
 
 gettingTasks();
 
+store.dispatch(loadTasks);
+// store.dispatch(addNewTask({task: "Complete this exercise"}));
+// store.dispatch(updateCompleted({id: 6, completed: true}));        // Updating task status on the Todo list
+store.dispatch(deleteTask({id: 6}));                                 // Deleting a Task from the Todo list
+store.dispatch(deleteTask({id: 8}));
+
+/* apiCallBegan({
+    url: "/tasks",
+    onStart: "tasks/apiRequested",
+    onSuccess: "getTasks",
+    onError: "SHOW_ERROR",
+  })
 
 
+ store.dispatch(apiCallBegan({
+  url: "/tasks",
+  onStart: "tasks/apiRequested",
+  onSuccess: "getTasks",
+  onError: "SHOW_ERROR",
+})); */ 
 
 // store.dispatch(addEmployee({ name: Emma }));
 
