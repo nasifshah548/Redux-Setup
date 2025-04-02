@@ -13,7 +13,7 @@ const taskSlice = createSlice({
   reducers: {
     // Action Functions
     getTasks: (state, action) => {
-      state.tasks = action.payload.tasks;
+      state.tasks = action.payload.tasks; // Update state
       state.loading = false; // Stop loading after fetching
     },
     addTask: (state, action) => {
@@ -66,6 +66,7 @@ export const loadTasks = () => (dispatch) => {
   dispatch(apiRequested()); // Trigger loading state
 
   dispatch(
+    // Connecting to Backend
     apiCallBegan({
       url, // This is the URL '/tasks', which corresponds to the `/api/tasks` endpoint at the backend
       onStart: apiRequested.type, // Dispatch this action when the API request starts (sets loading to true)

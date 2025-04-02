@@ -2,29 +2,30 @@
 // import { devToolsEnhancer } from "redux-devtools-extension";
 // import thunk from "redux-thunk";
 // import logger from "redux-logger";
-import { configureStore, createAsyncThunk } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import taskReducer from "./tasks/taskSlice";
 import employeeReducer from "./employeeSlice";
 import error from "./middleware/error";
 import api from "./middleware/api";
 
-const store = configureStore({ 
-    reducer: {                      // Storing the reducers at the store
-        tasks: taskReducer,
-        employees: employeeReducer,
-    },
-    middleware: (getDefaultMiddleware) => [
-        ...getDefaultMiddleware(), 
-       // logger, 
-        api, 
-        error
-    ], 
+const store = configureStore({
+  reducer: {
+    // Storing the reducers at the store
+    tasks: taskReducer,
+    employees: employeeReducer,
+  },
+  middleware: (getDefaultMiddleware) => [
+    ...getDefaultMiddleware(),
+    // logger,
+    api,
+    error,
+  ],
 });
 
 export default store;
 
 // The Middleware functions will run in order. First the default Middleware function will run.
-// Then the logger Middleware function will run, then the error Middleware function will run. 
+// Then the logger Middleware function will run, then the error Middleware function will run.
 
 // const composedEnhancers = compose(applyMiddleware(thunk), devToolsEnhancer({ trace: true }));
 
@@ -38,5 +39,5 @@ export default store;
 
 // The second argument of createStore() should be either a preloadedState or an enhancer.
 
-// applyMiddleware(thunk) and devToolsEnhancer({ trace: true }) both act as enhancers, 
+// applyMiddleware(thunk) and devToolsEnhancer({ trace: true }) both act as enhancers,
 // but createStore() only accepts one enhancer function.
