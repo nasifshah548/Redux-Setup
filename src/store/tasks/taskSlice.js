@@ -1,7 +1,5 @@
-// import * as actionTypes from "./actionTypes"; // importing all action types from actionTypes.js file
 import { createSlice } from "@reduxjs/toolkit";
-import { apiCallBegan } from "../api";
-// import { completeTask, removeTask } from "./action";
+import { apiCallBegan } from "../middleware/api";
 
 // MUTABLE STATE
 
@@ -11,34 +9,42 @@ import { apiCallBegan } from "../api";
 
 const taskSlice = createSlice({
   name: "tasks",
-  initialState: [],
+  initialState: { tasks: [], loading: false },
   reducers: {
     // Action Functions
     getTasks: (state, action) => {
-      return action.payload.tasks;
+      state.tasks = action.payload.tasks;
+      state.loading = false; // Stop loading after fetching
     },
     addTask: (state, action) => {
-      state.task.push(action.payload);
+      // Ensure state.tasks is always an array
+      if (!state.tasks) {
+        state.tasks = []; // If tasks is undefined, initialize it as an empty array
+      }
+      state.tasks.push(action.payload);
     },
-    /* addTask: (state, action) => {
-            state.push({
-                id: ++id,                       // Generating a new id by incrementing the id number cause we're adding a new task with new id
-                task: action.payload.task,      // Passing the task property in the payload object with the action
-                completed: false,               // Setting up a boolean depending on task completed or not, will change to true when task completed
-            })
-        }, */
     removeTask: (state, action) => {
-      const index = state.findIndex((task) => task.id === action.payload.id);
-      state.splice(index, 1);
+      state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
     },
     completedTask: (state, action) => {
-      const index = state.findIndex((task) => task.id === action.payload.id);
-      state[index].completed = action.payload.completed;
+      const index = state.tasks.findIndex(
+        (task) => task.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.tasks[index].completed = action.payload.completed;
+      }
+    },
+    // Define apiRequested and apiRequestedFailed
+    apiRequested: (state) => {
+      state.loading = true; // Set loading to true when the API request starts
+    },
+    apiRequestedFailed: (state) => {
+      state.loading = false; // Set loading to false if the API request fails
     },
   },
 });
 
-console.log(taskSlice);
+//  console.log(taskSlice);
 
 export const {
   apiRequested,
@@ -48,6 +54,7 @@ export const {
   completedTask,
   getTasks,
 } = taskSlice.actions; // Exporting the actions
+
 export default taskSlice.reducer; // Exporting all the reducers as a single chunck
 
 // Action Creators
@@ -55,25 +62,29 @@ const url = "/tasks";
 
 // Custom Middlware for API
 
-export const loadTasks = () =>
-  apiCallBegan({
-    url,
-    onStart: apiRequested.type,
-    onSuccess: getTasks.type,
-    onError: apiRequestedFailed.type,
-  });
+export const loadTasks = () => (dispatch) => {
+  dispatch(apiRequested()); // Trigger loading state
+
+  dispatch(
+    apiCallBegan({
+      url, // This is the URL '/tasks', which corresponds to the `/api/tasks` endpoint at the backend
+      onStart: apiRequested.type, // Dispatch this action when the API request starts (sets loading to true)
+      onSuccess: getTasks.type, // Dispatch this action on successful response (store tasks in the state)
+      onError: apiRequestedFailed.type, // Dispatch this action on error (sets loading to false)
+    })
+  );
+};
 
 export const addNewTask = (task) =>
   apiCallBegan({
     url,
     method: "POST",
     data: task,
-    onSuccess: addTask.type,
+    onSuccess: addTask.type, // This will update the task after the API request succeeds
   });
 
 export const updateCompleted = (task) =>
   apiCallBegan({
-    // task-6
     url: `${url}/${task.id}`,
     method: "PATCH",
     data: task,
@@ -82,7 +93,6 @@ export const updateCompleted = (task) =>
 
 export const deleteTask = (task) =>
   apiCallBegan({
-    // task-6
     url: `${url}/${task.id}`,
     method: "DELETE",
     onSuccess: removeTask.type,

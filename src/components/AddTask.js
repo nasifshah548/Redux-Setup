@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addNewTask } from "../store/tasks/taskSlice";
+import { addNewTask, addTask } from "../store/tasks/taskSlice";
 import { useDispatch } from "react-redux";
 
 const AddTask = () => {
@@ -9,7 +9,16 @@ const AddTask = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addNewTask({ task: task }));
+
+    // Create a new task object
+    const newTask = { task };
+
+    // Dispatch addTask to immediately add the task to the local state
+    dispatch(addTask(newTask));
+
+    // Then, dispatch addNewTask to send the task to the API (this is asynchronous)
+    dispatch(addNewTask(newTask));
+
     setTask("");
   };
 

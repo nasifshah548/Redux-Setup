@@ -3,23 +3,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadTasks } from "../store/tasks/taskSlice";
 
 const Tasks = () => {
-  const { tasks, loading } = useSelector((state) => state.tasks); // Importing tasks and loading from taskSlice
+  // Importing tasks and loading from taskSlice
+  const { tasks, loading } = useSelector(
+    (state) => state.tasks || { tasks: [], loading: false }
+  );
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadTasks());
-  }, []);
+    dispatch(loadTasks()); // Dispatch loadTasks when the component mounts
+  }, [dispatch]);
 
   return (
     <>
       {loading ? (
         <p>Loading...</p>
-      ) : (
+      ) : tasks && tasks.length > 0 ? (
         <div>
           {tasks.map((x) => (
             <p key={x.id}>{x.task}</p>
           ))}
         </div>
+      ) : (
+        <p>No tasks available</p>
       )}
     </>
   );

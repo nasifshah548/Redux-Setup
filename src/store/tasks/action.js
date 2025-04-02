@@ -1,12 +1,12 @@
 import * as actionTypes from "./actionTypes"; // importing all action types from actionTypes.js file
-import { createAction } from "@reduxjs/toolkit"; 
+import { createAction } from "@reduxjs/toolkit";
 
 // Actions
 
 export const addTask = createAction(actionTypes.ADD_TASK);
 export const removeTask = createAction(actionTypes.REMOVE_TASK);
 export const completeTask = createAction(actionTypes.TASK_COMPLETED);
-console.log(test({task: "Read Book"}));                 // Output: {type: "ADD_TASK", payload: {task: "Read Book"}}
+console.log(addTask({ task: "Read Book" })); // Output: {type: "ADD_TASK", payload: {task: "Read Book"}}
 
 /*
 
